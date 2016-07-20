@@ -18,8 +18,7 @@ public class YouTubeActivity extends YouTubeBaseActivity {
     private static final String VIDEO_ID = "videoId";
     private String videoId;
 
-    @BindView(R.id.player)
-    YouTubePlayerView youTubePlayerView;
+    @BindView(R.id.youtube_player_view_id) YouTubePlayerView youTubePlayerView;
 
     public static void newInstance(Context context, String videoId) {
         Intent intent = new Intent(context, YouTubeActivity.class);
@@ -30,7 +29,7 @@ public class YouTubeActivity extends YouTubeBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.you_tube_activity);
+        setContentView(R.layout.youtube_activity);
         ButterKnife.bind(this);
 
         videoId = getIntent().getStringExtra(VIDEO_ID);

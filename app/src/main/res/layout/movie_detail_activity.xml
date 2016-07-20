@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.zhaolongzhong.flickster.MovieDetailActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:padding="@dimen/space_small">
+
+        <!-- YouTube Player -->
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/movie_detail_activity_player_view_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Poster -->
+        <ImageView
+            android:id="@+id/movie_detail_activity_poster_image_view_id"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/movie_detail_activity_title_text_view_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/movie_detail_activity_player_view_id"
+            android:layout_marginTop="@dimen/space_medium"
+
+            android:textSize="@dimen/text_medium_large"/>
+
+        <!-- Release date -->
+        <TextView
+            android:id="@+id/movie_detail_activity_release_date_text_view_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_detail_activity_title_text_view_id"
+
+            android:textSize="@dimen/text_medium_small"/>
+
+        <!-- Rating bar -->
+        <RatingBar
+            android:id="@+id/movie_detail_activity_rating_bar_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_detail_activity_release_date_text_view_id"
+
+            android:isIndicator="false"
+            android:progressTint="@color/colorPrimary"
+            android:progressBackgroundTint="@color/colorPrimary"
+            android:secondaryProgressTint="@color/colorPrimary"
+            style="@style/RatingBarStyle"/>
+
+        <!-- Overview -->
+        <TextView
+            android:id="@+id/movie_detail_activity_overview_text_view_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_detail_activity_rating_bar_id"
+
+            android:textSize="@dimen/text_medium_small"/>
+
+    </RelativeLayout>
+
+</ScrollView>

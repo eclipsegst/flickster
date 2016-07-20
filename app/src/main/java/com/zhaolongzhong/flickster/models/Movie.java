@@ -78,8 +78,6 @@ public class Movie implements RealmModel {
     private boolean video;
     private double voteAverage;
 
-    private String trailerId;
-
     public String getPosterPath() {
         return String.format(Constants.IMAGE_W342_BASE_URL, posterPath);
     }
@@ -135,16 +133,6 @@ public class Movie implements RealmModel {
     public double getVoteAverage() {
         return voteAverage;
     }
-
-    public String getTrailerId() {
-        return trailerId;
-    }
-
-    public void setTrailerId(String trailerId) {
-        this.trailerId = trailerId;
-    }
-
-
 
     /**
      * @param jsonObject, movie JSONObject

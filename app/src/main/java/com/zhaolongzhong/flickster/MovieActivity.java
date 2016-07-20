@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -41,6 +43,7 @@ public class MovieActivity extends AppCompatActivity {
         movies.addAll(Movie.getAllMovies());
         movieAdapter = new MovieAdapter(this, movies);
         listView.setAdapter(movieAdapter);
+        listView.setOnItemClickListener(onItemClickListener);
         swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
         swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -53,6 +56,13 @@ public class MovieActivity extends AppCompatActivity {
             fetchVideosAsync(movie.getId());
         }
     }
+
+    private ListView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            MovieDetailActivity.newInstance(MovieActivity.this, movies.get(position).getId());
+        }
+    };
 
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
