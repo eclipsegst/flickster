@@ -51,10 +51,12 @@ public class MovieActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
 
         fetchMovieAsync(false);
+    }
 
-        for (Movie movie : movies) {
-            fetchVideosAsync(movie.getId());
-        }
+    private void invalidateViews() {
+        movies.clear();
+        movies.addAll(Movie.getAllMovies());
+        movieAdapter.notifyDataSetChanged();
     }
 
     private ListView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
@@ -83,9 +85,16 @@ public class MovieActivity extends AppCompatActivity {
                 try {
                     movieJsonResult = response.getJSONArray("results");
                     Movie.mapFromJSONArray(movieJsonResult);
-                    movies.clear();
-                    movies.addAll(Movie.getAllMovies());
-                    movieAdapter.notifyDataSetChanged();
+
+                    invalidateViews();
+
+                    //todo: any better way to handle this?
+                    for (Movie movie : movies) {
+                        //we only try to fetch video for movies that don't have video
+                        if (movie.getVideos().size() == 0) {
+                            fetchVideosAsync(movie.getId());
+                        }
+                    }
                 } catch (JSONException e) {
                     Log.e(TAG, "Error:", e);
                 }
@@ -114,6 +123,8 @@ public class MovieActivity extends AppCompatActivity {
                     if (videoJsonResult.length() == 0) {
                         return;
                     }
+
+                    invalidateViews();
                 } catch (JSONException e) {
                     Log.e(TAG, "Error:", e);
                 }
