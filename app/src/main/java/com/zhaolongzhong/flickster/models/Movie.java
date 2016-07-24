@@ -80,6 +80,7 @@ public class Movie implements RealmModel {
     private int voteCount;
     private boolean video;
     private double voteAverage;
+    private int runtime;
 
     private String movieType;
 
@@ -147,6 +148,14 @@ public class Movie implements RealmModel {
         this.movieType = movieType;
     }
 
+    public int getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(int runtime) {
+        this.runtime = runtime;
+    }
+
     /**
      * @param jsonObject, movie JSONObject
      * @throws JSONException
@@ -158,7 +167,15 @@ public class Movie implements RealmModel {
         this.adult = jsonObject.getBoolean(JSON_KEY_ADULT);
         this.overview = jsonObject.getString(JSON_KEY_OVERVIEW);
         this.releaseDate = jsonObject.getString(JSON_KEY_RELEASE_DATE);
-        this.genreIds = jsonObject.getString(JSON_KEY_GENRE_IDS);
+        JSONArray jsonArray = jsonObject.getJSONArray(JSON_KEY_GENRE_IDS);
+        for (int i = 0; i < jsonArray.length(); i++) {
+            if (this.genreIds == null) {
+                this.genreIds = jsonArray.getString(i);
+            } else {
+                this.genreIds += "," + jsonArray.getString(i);
+            }
+
+        }
         this.id = jsonObject.getString(JSON_KEY_id);
         this.originalTitle = jsonObject.getString(JSON_KEY_TITLE);
         this.originalLanguage = jsonObject.getString(JSON_KEY_ORIGINAL_LANGUAGE);

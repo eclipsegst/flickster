@@ -42,6 +42,17 @@
 
             android:textSize="@dimen/text_medium_small"/>
 
+        <!-- Runtime -->
+        <TextView
+            android:id="@+id/movie_detail_activity_runtime_text_view_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_detail_activity_title_text_view_id"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+
+            android:textSize="@dimen/text_medium_small"/>
+
         <!-- Rating bar -->
         <RatingBar
             android:id="@+id/movie_detail_activity_rating_bar_id"
@@ -55,12 +66,23 @@
             android:secondaryProgressTint="@color/colorPrimary"
             style="@style/RatingBarStyle"/>
 
+        <!-- Genre -->
+        <TextView
+            android:id="@+id/movie_detail_activity_genre_text_view_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/movie_detail_activity_rating_bar_id"
+
+            android:textSize="@dimen/text_medium_small"
+            android:textStyle="italic"/>
+
         <!-- Overview -->
         <TextView
             android:id="@+id/movie_detail_activity_overview_text_view_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/movie_detail_activity_rating_bar_id"
+            android:layout_below="@id/movie_detail_activity_genre_text_view_id"
+            android:layout_marginTop="@dimen/space_medium"
 
             android:textSize="@dimen/text_medium_small"/>
 

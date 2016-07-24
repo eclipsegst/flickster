@@ -5,6 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;;
 
+import com.zhaolongzhong.flickster.models.Genre;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -17,8 +19,6 @@ public class MovieActivity extends AppCompatActivity {
     @BindView(R.id.movie_activity_tab_layout_id) TabLayout tabLayout;
     @BindView(R.id.movie_activity_tab_view_pager_id) ViewPager viewPager;
 
-    private MovieFragmentPagerAdapter movieFragmentPagerAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +30,12 @@ public class MovieActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.upcoming));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.now_playing));
 
-        movieFragmentPagerAdapter = new MovieFragmentPagerAdapter(getFragmentManager());
+        MovieFragmentPagerAdapter movieFragmentPagerAdapter = new MovieFragmentPagerAdapter(getFragmentManager());
         viewPager.setAdapter(movieFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.setOnTabSelectedListener(onTabSelectedListener);
+
+        Genre.fetchGenresAsync();
     }
 
     private TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
