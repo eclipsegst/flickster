@@ -1,37 +1,23 @@
 package com.zhaolongzhong.flickster;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.zhaolongzhong.flickster.adapters.MovieAdapter;
-import com.zhaolongzhong.flickster.models.Movie;
-import com.zhaolongzhong.flickster.models.Video;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cz.msebera.android.httpclient.Header;
 
 public class MovieActivity extends AppCompatActivity {
     private static final String TAG = MovieActivity.class.getSimpleName();
 
-    private ArrayList<Movie> movies;
-    private MovieAdapter movieAdapter;
+    /*
+       Reference
+    */
+    @BindView(R.id.movie_activity_tab_layout_id) TabLayout tabLayout;
+    @BindView(R.id.movie_activity_tab_view_pager_id) ViewPager viewPager;
 
-    @BindView(R.id.movie_activity_swipe_refresh_layout_id) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.movie_activity_list_view_id) ListView listView;
+    private MovieFragmentPagerAdapter movieFragmentPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,101 +25,31 @@ public class MovieActivity extends AppCompatActivity {
         setContentView(R.layout.movie_activity);
         ButterKnife.bind(this);
 
-        movies = new ArrayList<>();
-        movies.addAll(Movie.getAllMovies());
-        movieAdapter = new MovieAdapter(this, movies);
-        listView.setAdapter(movieAdapter);
-        listView.setOnItemClickListener(onItemClickListener);
-        swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.popular));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.top_rated));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.upcoming));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.now_playing));
 
-        fetchMovieAsync(false);
+        movieFragmentPagerAdapter = new MovieFragmentPagerAdapter(getFragmentManager());
+        viewPager.setAdapter(movieFragmentPagerAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(onTabSelectedListener);
     }
 
-    private void invalidateViews() {
-        movies.clear();
-        movies.addAll(Movie.getAllMovies());
-        movieAdapter.notifyDataSetChanged();
-    }
-
-    private ListView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+    private TabLayout.OnTabSelectedListener onTabSelectedListener = new TabLayout.OnTabSelectedListener() {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            MovieDetailActivity.newInstance(MovieActivity.this, movies.get(position).getId());
+        public void onTabSelected(TabLayout.Tab tab) {
+            viewPager.setCurrentItem(tab.getPosition());
+        }
+
+        @Override
+        public void onTabUnselected(TabLayout.Tab tab) {
+
+        }
+
+        @Override
+        public void onTabReselected(TabLayout.Tab tab) {
+
         }
     };
-
-    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
-        @Override
-        public void onRefresh() {
-            fetchMovieAsync(true);
-        }
-    };
-
-    private void fetchMovieAsync(boolean isPullToRefresh) {
-        AsyncHttpClient client = new AsyncHttpClient();
-        // when user pull to refresh, we load second page movies
-        String params = isPullToRefresh ? "&page=2" : "";
-        client.get( String.format(Constants.MOVIE_URL, params), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                JSONArray movieJsonResult;
-
-                try {
-                    movieJsonResult = response.getJSONArray("results");
-                    Movie.mapFromJSONArray(movieJsonResult);
-
-                    invalidateViews();
-
-                    //todo: any better way to handle this?
-                    for (Movie movie : movies) {
-                        //we only try to fetch video for movies that don't have video
-                        if (movie.getVideos().size() == 0) {
-                            fetchVideosAsync(movie.getId());
-                        }
-                    }
-                } catch (JSONException e) {
-                    Log.e(TAG, "Error:", e);
-                }
-
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                swipeRefreshLayout.setRefreshing(false);
-                Log.d(TAG, "Fetch movies error." + errorResponse);
-            }
-        });
-    }
-
-    private void fetchVideosAsync(final String movieId) {
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(String.format(Constants.VIDEO_BASE_URL, movieId), new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                JSONArray videoJsonResult;
-
-                try {
-                    videoJsonResult = response.getJSONArray("results");
-                    Video.mapFromJSONArray(videoJsonResult, movieId);
-                    if (videoJsonResult.length() == 0) {
-                        return;
-                    }
-
-                    invalidateViews();
-                } catch (JSONException e) {
-                    Log.e(TAG, "Error:", e);
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.e(TAG, "Fetch movies error." + errorResponse);
-            }
-        });
-    }
 }

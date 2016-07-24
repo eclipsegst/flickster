@@ -36,7 +36,7 @@ import io.realm.annotations.RealmClass;
 public class Video implements RealmModel {
     private static final String TAG = Video.class.getSimpleName();
 
-    // Keys for parsing video JSONobject
+    // Keys for parsing video JSONObject
     private static String JSON_KEY_id = "id";
     private static String JSON_KEY_VIDEO_KEY = "key";
     private static String JSON_KEY_SITE= "site";
@@ -96,6 +96,8 @@ public class Video implements RealmModel {
      */
     public static RealmResults<Video> getVideosByMovieId(String movieId) {
         Realm realm = Realm.getDefaultInstance();
-        return realm.where(Video.class).equalTo(Video.MOVIE_ID_KEY, movieId).findAll();
+        RealmResults<Video> videos = realm.where(Video.class).equalTo(Video.MOVIE_ID_KEY, movieId).findAll();
+        realm.close();
+        return videos;
     }
 }

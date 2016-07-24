@@ -2,8 +2,10 @@
 <resources>
     <color name="colorPrimary">#00BCD4</color>
     <color name="colorPrimaryDark">#00838F</color>
-    <color name="colorAccent">#EEFF41</color>
+    <color name="colorAccent">#00BCD4</color>
 
     <!-- Alpha 0.6-->
     <color name="cyan100">#66B2EBF2</color>
+
+    <color name="white">#FFFFFF</color>
 </resources>

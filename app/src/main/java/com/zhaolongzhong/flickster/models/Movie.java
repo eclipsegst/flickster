@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.zhaolongzhong.flickster.Constants;
+import com.zhaolongzhong.flickster.MovieType;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +60,9 @@ public class Movie implements RealmModel {
     private static String JSON_KEY_VIDEO = "video";
     private static String JSON_KEY_VOTE_AVERAGE = "vote_average";
 
+    // Property name
     private static String ID_KEY = "id";
+    private static String MOVIE_TYPE_KEY = "movieType";
 
     // Movie properties
     @PrimaryKey
@@ -77,6 +80,8 @@ public class Movie implements RealmModel {
     private int voteCount;
     private boolean video;
     private double voteAverage;
+
+    private String movieType;
 
     public String getPosterPath() {
         return String.format(Constants.IMAGE_W342_BASE_URL, posterPath);
@@ -134,6 +139,14 @@ public class Movie implements RealmModel {
         return voteAverage;
     }
 
+    public String getMovieType() {
+        return movieType;
+    }
+
+    public void setMovieType(String movieType) {
+        this.movieType = movieType;
+    }
+
     /**
      * @param jsonObject, movie JSONObject
      * @throws JSONException
@@ -161,7 +174,7 @@ public class Movie implements RealmModel {
      * @param array, movie JSONArray
      * @return List of Movie object
      */
-    public static void mapFromJSONArray(JSONArray array) {
+    public static void mapFromJSONArray(JSONArray array, MovieType movieType) {
         RealmList<Movie> results = new RealmList<>();
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -169,6 +182,7 @@ public class Movie implements RealmModel {
             try {
                 Movie movie = new Movie();
                 movie.map(array.getJSONObject(i));
+                movie.setMovieType(movieType.getName());
                 results.add(movie);
             } catch (JSONException e) {
                 Log.e(TAG, "Error when parsing movie object.", e);
@@ -184,7 +198,20 @@ public class Movie implements RealmModel {
      */
     public static RealmResults<Movie> getAllMovies() {
         Realm realm = Realm.getDefaultInstance();
-        return realm.where(Movie.class).findAll();
+        RealmResults<Movie> movies =  realm.where(Movie.class).findAll();
+        realm.close();
+        return movies;
+    }
+
+    /**
+     * @param movieType
+     * @return a list of movies by movie type
+     */
+    public static RealmResults<Movie> getMoviesByMovieType(MovieType movieType) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Movie> movies =  realm.where(Movie.class).equalTo(MOVIE_TYPE_KEY, movieType.getName()).findAll();
+        realm.close();
+        return movies;
     }
 
     /**
@@ -193,7 +220,9 @@ public class Movie implements RealmModel {
      */
     public static @Nullable Movie getMovieById(String movieId) {
         Realm realm = Realm.getDefaultInstance();
-        return realm.where(Movie.class).equalTo(Movie.ID_KEY, movieId).findFirst();
+        Movie movie = realm.where(Movie.class).equalTo(ID_KEY, movieId).findFirst();
+        realm.close();
+        return movie;
     }
 
     /**
