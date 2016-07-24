@@ -39,6 +39,12 @@ The following **additional** features are implemented:
 * [X] Use MovieFragment
 * [X] Use tab navigation
 
+## Video Walkthrough
+
+Here's a walkthrough of implemented user stories:
+![Video Walkthrough](flickster.gif)
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Open-source libraries used
 
