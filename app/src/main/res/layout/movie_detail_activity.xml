@@ -12,8 +12,9 @@
         android:padding="@dimen/space_small">
 
         <!-- YouTube Player -->
-        <com.google.android.youtube.player.YouTubePlayerView
-            android:id="@+id/movie_detail_activity_player_view_id"
+        <fragment
+            android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+            android:id="@+id/movie_detail_activity_player_fragment_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -28,7 +29,7 @@
             android:id="@+id/movie_detail_activity_title_text_view_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/movie_detail_activity_player_view_id"
+            android:layout_below="@+id/movie_detail_activity_player_fragment_id"
             android:layout_marginTop="@dimen/space_medium"
 
             android:textSize="@dimen/text_medium_large"/>

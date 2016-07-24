@@ -3,16 +3,17 @@ package com.zhaolongzhong.flickster;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
@@ -27,13 +28,12 @@ import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import io.realm.Realm;
 
-public class MovieDetailActivity extends YouTubeBaseActivity {
+public class MovieDetailActivity extends AppCompatActivity {
     private static final String TAG = MovieDetailActivity.class.getSimpleName();
 
     private static final String MOVIE_ID = "movieId";
     private Movie movie;
 
-    @BindView(R.id.movie_detail_activity_player_view_id) YouTubePlayerView youTubePlayerView;
     @BindView(R.id.movie_detail_activity_poster_image_view_id) ImageView posterImageView;
     @BindView(R.id.movie_detail_activity_title_text_view_id) TextView titleTextView;
     @BindView(R.id.movie_detail_activity_genre_text_view_id) TextView genreTextView;
@@ -53,23 +53,23 @@ public class MovieDetailActivity extends YouTubeBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_detail_activity);
         ButterKnife.bind(this);
+        setTitle("");
+        YouTubePlayerFragment youTubePlayerFragment = (YouTubePlayerFragment)getFragmentManager()
+                .findFragmentById(R.id.movie_detail_activity_player_fragment_id);
+
 
         String movieId = getIntent().getStringExtra(MOVIE_ID);
         movie = Movie.getMovieById(movieId);
         fetchMovieDetailAsync();
 
-        ratingBar.setMax(10);
-
         invalidateViews();
         // todo: any better way to handle none video?
         if (movie.getVideos().size() > 0) {
-            youTubePlayerView.initialize(Constants.YOUTUBE_API_KEY, onInitializedListener);
+            youTubePlayerFragment.initialize(Constants.YOUTUBE_API_KEY, onInitializedListener);
             posterImageView.setVisibility(View.GONE);
         } else {
-            youTubePlayerView.setVisibility(View.INVISIBLE);
             posterImageView.setVisibility(View.VISIBLE);
         }
-
     }
 
     private void invalidateViews() {
@@ -152,5 +152,25 @@ public class MovieDetailActivity extends YouTubeBaseActivity {
                 Log.e(TAG, "Fetch movie detail error." + errorResponse);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                close();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        close();
+    }
+
+    public void close() {
+        finish();
+        overridePendingTransition(0, R.anim.right_out);
     }
 }

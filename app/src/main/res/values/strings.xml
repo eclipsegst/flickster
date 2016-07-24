@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Flickster</string>
+    <string name="app_name">flickster</string>
 
     <!-- tabs -->
     <string name="popular">Popular</string>

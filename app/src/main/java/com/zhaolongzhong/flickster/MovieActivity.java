@@ -1,9 +1,11 @@
 package com.zhaolongzhong.flickster;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;;
+import android.support.v7.app.AppCompatActivity;
 
 import com.zhaolongzhong.flickster.models.Genre;
 
@@ -12,6 +14,11 @@ import butterknife.ButterKnife;
 
 public class MovieActivity extends AppCompatActivity {
     private static final String TAG = MovieActivity.class.getSimpleName();
+
+    public static void newInstance(Context context) {
+        Intent intent = new Intent(context, MovieActivity.class);
+        context.startActivity(intent);
+    }
 
     /*
        Reference

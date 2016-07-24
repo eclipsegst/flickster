@@ -2,7 +2,7 @@
 
 **Flickster** shows the latest movies currently playing in theaters. The app utilizes the Movie Database API to display images and basic information about these movies to the user.
 
-Time spent: **16** hours spent in total
+Time spent: **18** hours spent in total
 
 ## User Stories
 
@@ -38,11 +38,16 @@ The following **additional** features are implemented:
 * [X] Persist data using Realm
 * [X] Use MovieFragment
 * [X] Use tab navigation
+* [X] Add splash screen
+* [X] Add launch icon
+* [X] Add animation between MovieActivity and MovieDetailActivity
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
-![Video Walkthrough](flickster.gif)
+
+![Video Walkthrough 1](flickster-p.gif)
+![Video Walkthrough 2](flickster-l.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 

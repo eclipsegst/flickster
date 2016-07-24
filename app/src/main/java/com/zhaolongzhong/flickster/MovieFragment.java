@@ -83,6 +83,7 @@ public class MovieFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             MovieDetailActivity.newInstance(getActivity(), movies.get(position).getId());
+            getActivity().overridePendingTransition(R.anim.right_in, R.anim.stay);
         }
     };
 
